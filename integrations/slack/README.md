@@ -4,7 +4,7 @@ AgentRQ's Slack integration allows seamless, real-time collaboration between you
 - **Slash Commands**: Use `/t` to create tasks instantly from Slack.
 - **Bidirectional Sync**: Real-time message and private file attachment synchronization inside Slack threads.
 - **MCP Permission Control**: Approve or reject sensitive agent commands using interactive Block Kit buttons (Allow/Deny) inside Slack threads.
-- **Secure Tenancy**: Isolated channels per workspace with GORM-persisted AES-256 encrypted access tokens.
+- **Secure Tenancy**: Each AgentRQ workspace maps directly to a single, isolated private Slack channel, ensuring strict task and file separation between projects. All OAuth tokens are persisted and AES-256 encrypted.
 
 ---
 
@@ -86,9 +86,9 @@ Restart your backend server (`make dev`) to load the new settings.
 3. Click the **Slack** sub-tab.
 4. Click **Link Slack Channel** (this initiates the OAuth2 v2 flow).
 5. Review the requested permissions in Slack and authorize the app.
-6. Upon redirect:
-   - **Manual Provisioning**: Enter your Slack Channel ID and Name in the input fields.
-   - **Automatic Provisioning**: If left blank, the app will automatically create a secure private channel named `agentrq-<workspace-name>` and invite the installer to it.
+6. Upon redirect, associate your workspace with a private Slack channel. **Each AgentRQ workspace maps to exactly one private channel** to guarantee strict data separation between your projects:
+   - **Automatic Provisioning (Recommended)**: If left blank, the app automatically creates a secure private channel named `agentrq-<workspace-name>` and invites the installer.
+   - **Manual Provisioning**: Enter your preferred Slack Channel ID and Name manually in the input fields.
 
 ---
 
