@@ -551,8 +551,10 @@ const copiedState = ref({
 });
 
 const authenticatedUrl = computed(() => {
-  if (!token.value || !workspace.value?.mcpUrl) return workspace.value?.mcpUrl || '';
-  return `${workspace.value.mcpUrl}?token=${token.value}`;
+  if (!workspace.value?.mcpUrl) return '';
+  const baseUrl = workspace.value.mcpUrl.split('?')[0];
+  if (!token.value) return baseUrl;
+  return `${baseUrl}?token=${token.value}`;
 });
 
 const serverName = computed(() => `agentrq-${workspaceId.value}`);
