@@ -722,3 +722,12 @@ func isValidTaskStatus(status string) bool {
 	}
 	return false
 }
+
+func (c *controller) GetGlobalTaskStats(ctx context.Context, userID string) (*entity.GlobalTaskStatsResponse, error) {
+	uid := monoflake.IDFromBase62(userID).Int64()
+	res, err := c.repository.GetGlobalTaskStats(ctx, uid)
+	if err != nil {
+		return nil, err
+	}
+	return &res, nil
+}

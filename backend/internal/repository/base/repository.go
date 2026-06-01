@@ -50,6 +50,7 @@ type Repository interface {
 	CreateUser(ctx context.Context, u model.User) (model.User, error)
 	UpdateUser(ctx context.Context, u model.User) (model.User, error)
 	GetNextTask(ctx context.Context, workspaceID int64, userID int64) (model.Task, error)
+	GetGlobalTaskStats(ctx context.Context, userID int64) (entity.GlobalTaskStatsResponse, error)
 
 	// Slack integration
 	UpsertSlackWorkspaceLink(ctx context.Context, link model.SlackWorkspaceLink) error
@@ -605,4 +606,27 @@ func (r *repository) GetSlackTaskThreadByChannel(ctx context.Context, channelID,
 		return model.SlackTaskThread{}, ErrNotFound
 	}
 	return t, err
+}
+
+func (r *repository) GetGlobalTaskStats(ctx context.Context, userID int64) (entity.GlobalTaskStatsResponse, error) {
+	var res entity.GlobalTaskStatsResponse
+	var pending, scheduled int64
+
+	err := r.conn(ctx).Model(&model.Task{}).
+		Where("user_id = ? AND status IN ?", userID, []string{"notstarted", "ongoing", "blocked"}).
+		Count(&pending).Error
+	if err != nil {
+		return res, err
+	}
+
+	err = r.conn(ctx).Model(&model.Task{}).
+		Where("user_id = ? AND status = ?", userID, "cron").
+		Count(&scheduled).Error
+	if err != nil {
+		return res, err
+	}
+
+	res.PendingTasks = pending
+	res.ScheduledTasks = scheduled
+	return res, nil
 }

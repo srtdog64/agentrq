@@ -324,6 +324,11 @@ type (
 		Count int64  `json:"count"`
 	}
 
+	GlobalTaskStatsResponse struct {
+		PendingTasks   int64 `json:"pendingTasks"`
+		ScheduledTasks int64 `json:"scheduledTasks"`
+	}
+
 	GetWorkspaceStatsRequest struct {
 		ID     int64  `json:"id"`
 		UserID string `json:"userId"`

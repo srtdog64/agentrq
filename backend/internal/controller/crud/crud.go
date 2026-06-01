@@ -100,6 +100,7 @@ type TaskController interface {
 	ReplyToTask(ctx context.Context, req entity.ReplyToTaskRequest) (*entity.ReplyToTaskResponse, error)
 	UpdateScheduledTask(ctx context.Context, req entity.UpdateScheduledTaskRequest) (*entity.UpdateScheduledTaskResponse, error)
 	UpdateMessageMetadata(ctx context.Context, req entity.UpdateMessageMetadataRequest) error
+	GetGlobalTaskStats(ctx context.Context, userID string) (*entity.GlobalTaskStatsResponse, error)
 	DeleteTask(ctx context.Context, req entity.DeleteTaskRequest) (*entity.DeleteTaskResponse, error)
 	GetAttachment(ctx context.Context, req entity.GetAttachmentRequest) (*entity.GetAttachmentResponse, error)
 }

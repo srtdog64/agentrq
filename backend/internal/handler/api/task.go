@@ -35,6 +35,7 @@ const (
 
 func (h *handler) registerTaskRoutes() error {
 	h.router.Get("/tasks", h.listTasks())
+	h.router.Get("/tasks/stats", h.getGlobalTaskStats())
 	h.router.Post(_routePathTasks, h.createTask())
 	h.router.Get(_routePathTasks, h.listTasks())
 	h.router.Get(_routePathTask, h.getTask())
@@ -555,4 +556,21 @@ func formatAttachments(atts []entity.Attachment) string {
 		return ""
 	}
 	return "Attachments:\n" + strings.Join(parts, "\n")
+}
+
+func (h *handler) getGlobalTaskStats() fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		c.Set(_headerContentType, _mimeJSON)
+		userID := c.Locals("user_id").(string)
+		ctx, cancel := newContext(c)
+		defer cancel()
+
+		rs, err := h.crud.GetGlobalTaskStats(ctx, userID)
+		if err != nil {
+			e, status := mapper.FromErrorToHTTPResponse(err)
+			c.Status(status)
+			return c.Send(e)
+		}
+		return c.JSON(rs)
+	}
 }

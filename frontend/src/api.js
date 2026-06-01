@@ -256,3 +256,9 @@ export async function removeWorkspaceSlackChannel(id) {
   if (!res.ok) throw new Error('Failed to remove workspace Slack channel');
   return true;
 }
+
+export async function fetchGlobalTaskStats() {
+  const res = await fetch(`${API_BASE_URL}/tasks/stats`);
+  if (!res.ok) throw new Error('Failed to fetch global task stats');
+  return res.json();
+}
