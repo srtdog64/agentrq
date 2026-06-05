@@ -242,7 +242,8 @@ async function loadAllForFilter() {
     await Promise.all([
       fetchGroup('ongoing'),
       fetchGroup('notstarted'),
-      fetchGroup('scheduled')
+      fetchGroup('scheduled'),
+      fetchGroup('completed')
     ]);
   } else if (f === 'notstarted') {
     await fetchGroup('notstarted');
@@ -480,6 +481,19 @@ const displayGroups = computed(() => {
       category: 'scheduled',
       totalCount: counts.value.scheduled
     });
+
+    const sortedCompleted = [...completedTasks.value]
+      .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
+      .slice(0, 3);
+    if (sortedCompleted.length > 0) {
+      groups.push({
+        title: 'Recently Completed',
+        tasks: sortedCompleted,
+        hasMore: false,
+        category: 'completed',
+        totalCount: counts.value.completed
+      });
+    }
   }
 
   if (f === 'pending') {
