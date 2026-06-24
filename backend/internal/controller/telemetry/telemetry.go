@@ -172,6 +172,8 @@ func (c *controller) recordMCP(event mcp.MCPEvent) {
 	switch event.Action {
 	case mcp.ActionMCPToolCall:
 		action = model.ActionIDMCPToolCall
+	case mcp.ActionMCPConnect:
+		action = model.ActionIDMCPConnect
 	case mcp.ActionMCPNotification:
 		switch event.Method {
 		case "permission_manual_allow":

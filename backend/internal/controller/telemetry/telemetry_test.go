@@ -91,6 +91,14 @@ func TestTelemetryController(t *testing.T) {
 			Actor:       uint8(entity.ActorAgent),
 		}
 
+		// Send MCP Connect
+		mcpChan <- mcp.MCPEvent{
+			UserID:      1,
+			WorkspaceID: 10,
+			Action:      mcp.ActionMCPConnect,
+			Actor:       uint8(entity.ActorAgent),
+		}
+
 		// Send Rejection (Manual Task)
 		crudChan <- entity.CRUDEvent{
 			UserID:      1,
@@ -112,8 +120,8 @@ func TestTelemetryController(t *testing.T) {
 
 		var count int64
 		db.Model(&model.Telemetry{}).Count(&count)
-		if count != 6 {
-			t.Errorf("expected 6 telemetry records, got %d", count)
+		if count != 7 {
+			t.Errorf("expected 7 telemetry records, got %d", count)
 		}
 
 		var records []model.Telemetry
@@ -121,6 +129,7 @@ func TestTelemetryController(t *testing.T) {
 		manualFound := false
 		rejectFound := false
 		denyFound := false
+		connectFound := false
 		for _, r := range records {
 			if r.Action == model.ActionIDMCPPermissionManual {
 				manualFound = true
@@ -131,6 +140,9 @@ func TestTelemetryController(t *testing.T) {
 			if r.Action == model.ActionIDMCPPermissionDeny {
 				denyFound = true
 			}
+			if r.Action == model.ActionIDMCPConnect {
+				connectFound = true
+			}
 		}
 		if !manualFound {
 			t.Errorf("expected model.ActionIDMCPPermissionManual record, but not found")
@@ -140,6 +152,9 @@ func TestTelemetryController(t *testing.T) {
 		}
 		if !denyFound {
 			t.Errorf("expected model.ActionIDMCPPermissionDeny record, but not found")
+		}
+		if !connectFound {
+			t.Errorf("expected model.ActionIDMCPConnect record, but not found")
 		}
 	})
 

@@ -167,4 +167,5 @@ const (
 	ActionIDTaskComplete
 	ActionIDTaskFromScheduled
 	ActionIDUserCreate
+	ActionIDMCPConnect
 )

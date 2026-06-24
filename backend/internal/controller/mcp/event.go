@@ -10,6 +10,7 @@ const (
 	ActionMCPToolCall Action = iota + 1
 	ActionMCPMethodCall
 	ActionMCPNotification
+	ActionMCPConnect
 )
 
 func (a Action) String() string {
@@ -20,6 +21,8 @@ func (a Action) String() string {
 		return "method_call"
 	case ActionMCPNotification:
 		return "notification"
+	case ActionMCPConnect:
+		return "connect"
 	}
 	return "unknown"
 }

@@ -337,6 +337,7 @@ func (ps *WorkspaceServer) Handler() http.Handler {
 					Type:    "agent.connected",
 					Payload: map[string]any{"connected": true, "workspaceId": ps.workspaceID},
 				})
+				ps.emitTelemetry(r.Context(), ActionMCPConnect, "connect")
 			}
 			defer func() {
 				if ps.agentConnections.Add(-1) == 0 {
